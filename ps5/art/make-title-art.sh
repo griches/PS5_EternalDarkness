@@ -9,7 +9,10 @@
 #
 # Both pictures are the port's own (an eclipse over a ring of standing stones, made for it
 # with ChatGPT in the look of the game's cover): nothing in them
-# is from the game.
+# is from the game. The background was then edited with Google's Gemini image model: the
+# figure taken out, and the sky and landscape extended so the eclipse and the stones sit
+# clear of what the home screen covers (the top quarter: menu bar and tiles; the left
+# third: title, Play Game, Friends Who Play).
 # Needs Python with Pillow and numpy.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
