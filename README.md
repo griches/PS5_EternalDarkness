@@ -47,8 +47,8 @@ the recomp reads as its environment (for example `ED_QUICKLOAD=saves/slot1.state
 to start in a save, `AURORA_GPU_TIME_LOG=1` for frame times in klog).
 
 The home-screen art (`ps5/art`, converted by `ps5/art/make-title-art.sh`) is
-the port's own: the icon made with ChatGPT, the background with Google's Gemini
-image model; nothing in it is from the game.
+the port's own, made with ChatGPT in the look of the game's cover; nothing in it
+is from the game.
 
 ## Licence
 
