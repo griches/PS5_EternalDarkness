@@ -106,6 +106,19 @@ for name in "${shims[@]}"; do
     radv_link_flags+=("--defsym=$name=ps5dl_$name")
 done
 radv_link_flags+=(--version-script "$work/link/shims-local.map")
+# The title's folder as the working folder (ps5/src/paths.c): chdir is refused to
+# a title and libc's getcwd is a null import (it calls __getcwd, which only
+# libkernel_sys exports; std::filesystem::current_path jumped to nothing), so the
+# path functions take a relative path from /app0, and getcwd and chdir answer for it.
+for name in fopen open stat lstat mkdir rmdir unlink remove rename opendir access realpath; do
+    radv_link_flags+=("--wrap=$name")
+done
+bound=(getcwd chdir)
+{ printf '{\n    local:\n'; printf '        %s;\n' "${bound[@]}"; printf '};\n'; } > "$work/link/cwd-local.map"
+for name in "${bound[@]}"; do
+    radv_link_flags+=("--defsym=$name=ps5ed_$name")
+done
+radv_link_flags+=(--version-script "$work/link/cwd-local.map")
 # A thread_local declared in a header without its initialiser is reached through a
 # wrapper that calls the variable's initialisation function (_ZTH<name>) if one
 # exists: a weak reference. The game's are all constant-initialised, so none

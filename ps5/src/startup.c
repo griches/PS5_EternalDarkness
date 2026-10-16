@@ -9,6 +9,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 #include <dirent.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,8 +117,6 @@ __attribute__((constructor)) static void
 ps5_startup(void)
 {
    platform_init(PS5_TITLE_NAME);
-   if (chdir(TITLE_DIR) != 0)
-      fprintf(stderr, "startup: cannot enter " TITLE_DIR "\n");
    load_env_file();
    mkdir(CACHE_DIR, 0777);
    seed_shader_caches();
