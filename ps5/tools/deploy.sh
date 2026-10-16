@@ -17,6 +17,8 @@ title_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["titl
 # The art always goes: every 3840x2160 pic0/pic1.dds has the same size, which
 # the tool would take for unchanged. The home screen shows the copy in
 # /user/appmeta/<TITLE_ID> (ps5/tools/console.sh deploy refreshes that too).
-exec python3 "$vulkan/tools/deploy-title-folder.py" --always eboot.bin \
-    --always sce_sys/icon0.png --always sce_sys/pic0.dds --always sce_sys/pic1.dds \
-    "$root/dist/$title_id" "$@"
+# res/ (12 MB) always goes in full too: its images change without changing size.
+always=(--always eboot.bin --always sce_sys/icon0.png --always sce_sys/pic0.dds --always sce_sys/pic1.dds)
+while IFS= read -r file; do always+=(--always "${file#"$root/dist/$title_id/"}"); done \
+    < <(find "$root/dist/$title_id/res" -type f)
+exec python3 "$vulkan/tools/deploy-title-folder.py" "${always[@]}" "$root/dist/$title_id" "$@"

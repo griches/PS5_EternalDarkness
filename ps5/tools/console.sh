@@ -30,6 +30,10 @@ deploy)
     art=(sce_sys/icon0.png sce_sys/pic0.dds sce_sys/pic1.dds)
     always=(--always eboot.bin)
     for file in "${art[@]}"; do always+=(--always "$file"); done
+    # res/ (12 MB) always goes in full too: its images change without changing
+    # size (the menus' key icons, af1d7b8)
+    while IFS= read -r file; do always+=(--always "${file#"$root/dist/$title_id/"}"); done \
+        < <(find "$root/dist/$title_id/res" -type f)
     python3 "$vulkan/tools/deploy-title-folder.py" "${always[@]}" "$root/dist/$title_id"
     for file in "${art[@]}"; do
         curl -s -T "$root/dist/$title_id/$file" "ftp://$host:2121/user/appmeta/$title_id/${file#sce_sys/}" ||
