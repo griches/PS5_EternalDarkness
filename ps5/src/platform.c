@@ -50,6 +50,11 @@ platform_init(const char *title_name)
    static char prefix[64];
    snprintf(prefix, sizeof(prefix), "[%s] ", title_name);
    const int captured = ps5_klog_capture_stderr(prefix);
+   /* The recomp prints why its run ended ("[run] stopped: ...") to standard
+    * output, which goes nowhere on the console: into klog with the rest. This
+    * covers fputs(..., stdout); printf, puts and putchar are wrapped below. */
+   if (captured == 0)
+      stdout = stderr;
    say("starts (standard error to klog: %s)", captured == 0 ? "yes" : "no");
    /* The shell's splash covers the title's frames until it is dismissed. */
    say("splash dismissed: %d", sceSystemServiceHideSplashScreen());
@@ -64,6 +69,31 @@ say(const char *format, ...)
    va_end(args);
    fputc('\n', stderr);
    fflush(stderr);
+}
+
+/* The console's printf, puts and putchar write to its C library's own standard
+ * output whatever stdout names: standard error instead (--wrap,
+ * ps5/tools/link-title.sh). */
+int
+__wrap_printf(const char *format, ...)
+{
+   va_list args;
+   va_start(args, format);
+   const int written = vfprintf(stderr, format, args);
+   va_end(args);
+   return written;
+}
+
+int
+__wrap_puts(const char *text)
+{
+   return fprintf(stderr, "%s\n", text) < 0 ? EOF : 0;
+}
+
+int
+__wrap_putchar(int character)
+{
+   return fputc(character, stderr);
 }
 
 double

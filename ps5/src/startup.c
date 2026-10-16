@@ -113,6 +113,29 @@ load_env_file(void)
    fclose(file);
 }
 
+/* The recomp's main stops the game after --max-blocks guest blocks, 50 million
+ * when it is not given: a watchdog for test runs, which ended the game in its
+ * prologue movie. The console passes a title no arguments, so the CRT's call
+ * comes here (--wrap=main, ps5/tools/link-title.sh) and main gets the limit
+ * play.sh, play.bat and the Deck's play.sh give it. */
+int __real_main(int argc, char **argv, char **envp);
+
+int
+__wrap_main(int argc, char **argv, char **envp)
+{
+   static char max_blocks[] = "--max-blocks", no_limit[] = "1000000000000000";
+   char *args[64];
+   int count = 0;
+
+   args[count++] = argc > 0 ? argv[0] : "eboot.bin";
+   args[count++] = max_blocks;
+   args[count++] = no_limit;
+   for (int i = 1; i < argc && count < 63; i++)
+      args[count++] = argv[i];
+   args[count] = NULL;
+   return __real_main(count, args, envp);
+}
+
 __attribute__((constructor)) static void
 ps5_startup(void)
 {

@@ -113,6 +113,12 @@ radv_link_flags+=(--version-script "$work/link/shims-local.map")
 for name in fopen open stat lstat mkdir rmdir unlink remove rename opendir access realpath; do
     radv_link_flags+=("--wrap=$name")
 done
+# The console passes no arguments: ps5/src/startup.c gives main play.sh's block limit
+radv_link_flags+=(--wrap=main)
+# Standard output into klog (ps5/src/platform.c): the recomp prints there why its run ended
+for name in printf puts putchar; do
+    radv_link_flags+=("--wrap=$name")
+done
 bound=(getcwd chdir)
 { printf '{\n    local:\n'; printf '        %s;\n' "${bound[@]}"; printf '};\n'; } > "$work/link/cwd-local.map"
 for name in "${bound[@]}"; do
