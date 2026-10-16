@@ -7,9 +7,11 @@
 #   pic-source.png    ->  ps5/sce_sys/pic0.dds    the background behind the title, 3840x2160
 #                     ->  ps5/sce_sys/pic1.dds    the splash while it starts
 #
-# Both pictures are the port's own (an eclipse over a ring of standing stones, made for it
-# with ChatGPT in the look of the game's cover): nothing in them
-# is from the game.
+# Both pictures are the port's own, nothing in them is from the game: the icon (an eclipse
+# over a ring of standing stones) made with ChatGPT, the background (a black planet in a
+# broken arch over a drowned city of impossible stairs) with Google's Gemini image model.
+# The background keeps its subject out of what the home screen covers: the top quarter
+# (menu bar and tile row) and the left third (title, Play Game, Friends Who Play).
 # Needs Python with Pillow and numpy.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
