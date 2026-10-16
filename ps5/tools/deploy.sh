@@ -14,4 +14,9 @@ root=$(dirname "$ps5")
 vulkan=$(cd -- "${PS5_VULKAN_DIR:-$root/../PS5_Vulkan}" && pwd)
 title_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["titleId"])' "$ps5/sce_sys/param.json")
 [[ -d $root/dist/$title_id ]] || { echo "no dist/$title_id: run ps5/tools/build.sh first" >&2; exit 2; }
-exec python3 "$vulkan/tools/deploy-title-folder.py" --always eboot.bin "$root/dist/$title_id" "$@"
+# The art always goes: every 3840x2160 pic0/pic1.dds has the same size, which
+# the tool would take for unchanged. The home screen shows the copy in
+# /user/appmeta/<TITLE_ID> (ps5/tools/console.sh deploy refreshes that too).
+exec python3 "$vulkan/tools/deploy-title-folder.py" --always eboot.bin \
+    --always sce_sys/icon0.png --always sce_sys/pic0.dds --always sce_sys/pic1.dds \
+    "$root/dist/$title_id" "$@"

@@ -23,7 +23,18 @@ ftp="ftp://$host:2121/data/homebrew/$title_id"
 
 case ${1:?usage: console.sh deploy|game-files|run|env|quit} in
 deploy)
-    exec python3 "$vulkan/tools/deploy-title-folder.py" --always eboot.bin "$root/dist/$title_id"
+    # The art always goes: the tool skips a file whose size matches the console's
+    # copy, and every 3840x2160 pic0/pic1.dds has the same size. The home screen
+    # shows the copy in /user/appmeta/<TITLE_ID>, taken when the title was
+    # registered, so that one is refreshed too.
+    art=(sce_sys/icon0.png sce_sys/pic0.dds sce_sys/pic1.dds)
+    always=(--always eboot.bin)
+    for file in "${art[@]}"; do always+=(--always "$file"); done
+    python3 "$vulkan/tools/deploy-title-folder.py" "${always[@]}" "$root/dist/$title_id"
+    for file in "${art[@]}"; do
+        curl -s -T "$root/dist/$title_id/$file" "ftp://$host:2121/user/appmeta/$title_id/${file#sce_sys/}" ||
+            echo "home-screen art not refreshed: /user/appmeta/$title_id/${file#sce_sys/}" >&2
+    done
     ;;
 game-files)
     for game in "$root"/gamedata/*/; do
