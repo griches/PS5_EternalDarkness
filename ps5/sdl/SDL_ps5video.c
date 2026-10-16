@@ -6,10 +6,10 @@
  * is the whole screen. Nothing is drawn through SDL; the title's renderer
  * presents through VK_KHR_display on its own.
  *
- * The size is the options menu's "Output resolution" (COS_PS5_OUTPUT in the
- * game's settings file, the picture's height; 3840x2160 unless it says
- * otherwise): Aurora sizes its surface and the game's "window size" by it.
- * SDL_PS5_DISPLAY=WIDTHxHEIGHT in the environment sets another.
+ * The display is 3840x2160 (the console scales it to the TV): Aurora sizes its
+ * surface and the game's "window size" by it, and its content scale (height /
+ * 1080) sizes the menus. SDL_PS5_DISPLAY=WIDTHxHEIGHT in the environment sets
+ * another size.
  *
  * SPDX-License-Identifier: Zlib
  */
@@ -25,22 +25,10 @@
 static bool PS5_VideoInit(SDL_VideoDevice *_this)
 {
     SDL_DisplayMode mode;
+    SDL_DisplayID display;
     int w = 3840, h = 2160;
     const char *size = SDL_getenv("SDL_PS5_DISPLAY");
-    FILE *settings = size ? NULL : fopen("/app0/user/settings.ini", "r");
 
-    if (settings) {
-        char line[256];
-        int height;
-
-        while (fgets(line, sizeof(line), settings) != NULL) {
-            if (SDL_sscanf(line, "COS_PS5_OUTPUT=%d", &height) == 1 && (height == 1080 || height == 1440)) {
-                w = height == 1080 ? 1920 : 2560;
-                h = height;
-            }
-        }
-        fclose(settings);
-    }
     if (size && SDL_sscanf(size, "%dx%d", &w, &h) != 2) {
         w = 3840;
         h = 2160;
@@ -50,7 +38,14 @@ static bool PS5_VideoInit(SDL_VideoDevice *_this)
     mode.w = w;
     mode.h = h;
     mode.refresh_rate = 60.0f;
-    return SDL_AddBasicVideoDisplay(&mode) != 0;
+    display = SDL_AddBasicVideoDisplay(&mode);
+    if (display == 0) {
+        return false;
+    }
+    /* A TV seen from across the room: menus at the size a 1080p screen shows
+     * them (twice that in pixels at 4K), not a desk monitor's 1:1 */
+    SDL_SetDisplayContentScale(SDL_GetVideoDisplay(display), (float)h / 1080.0f);
+    return true;
 }
 
 static void PS5_VideoQuit(SDL_VideoDevice *_this)

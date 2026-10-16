@@ -90,7 +90,9 @@ fi
 game_id=$(head -c 6 "$disc")
 case $game_id in GEDP01 | GEDE01) ;; *) echo "setup-source.sh: $disc is $game_id, not Eternal Darkness" >&2; exit 2 ;; esac
 out="$root/gamedata/$game_id"
-stamp="$(<"$deps/DolRecomp/.ps5-stamp") $(git -C "$recomp" rev-parse HEAD) $(stat -L -c '%s %Y' "$disc")"
+# What makes the code: the recompiler (pin + patch), the recomp's generator
+# (tools/, config/) and the disc; not the recomp's host, which the build compiles
+stamp="$(<"$deps/DolRecomp/.ps5-stamp") $(cat "$recomp"/tools/*.py "$recomp"/config/*/* | sha256sum | cut -d' ' -f1) $(stat -L -c '%s %Y' "$disc")"
 if [[ ! -f $out/.ps5-stamp || $(<"$out/.ps5-stamp") != "$stamp" ]]; then
     # generate.py works from its own tree (tools/, config/, .deps/DolRecomp):
     # a scratch tree with those, so the submodule stays as it is
