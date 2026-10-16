@@ -1,0 +1,16 @@
+diff --git a/runtime/host/hle.c b/runtime/host/hle.c
+index 58a13eb..d2ff930 100644
+--- a/runtime/host/hle.c
++++ b/runtime/host/hle.c
+@@ -1913,7 +1913,11 @@ static bool thp_movie_plane_generation(CPUState* cpu, u32 guest_data,
+ 
+ static double host_time_seconds(void) {
+     struct timespec ts;
++#if defined(__PROSPERO__)
++    clock_gettime(CLOCK_REALTIME, &ts);  // the console's C library has no timespec_get
++#else
+     timespec_get(&ts, TIME_UTC);
++#endif
+     return (double)ts.tv_sec + (double)ts.tv_nsec / 1000000000.0;
+ }
+ 

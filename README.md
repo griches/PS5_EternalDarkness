@@ -40,7 +40,11 @@ ps5/tools/vm.sh run                     # launch and follow klog
 
 On the console the title folder also needs the disc and the translated
 `main.dol`: `dump/<id>.iso` and `generated/main.dol` under
-`/data/homebrew/PPSA99314/`.
+`/data/homebrew/PPSA99314/` (`ps5/tools/console.sh game-files`).
+`ps5/tools/console.sh` also deploys and runs from macOS itself, for when the VM
+cannot reach the console, and writes the title's `env.txt`: `KEY=VALUE` lines
+the recomp reads as its environment (for example `ED_QUICKLOAD=saves/slot1.state`
+to start in a save, `AURORA_GPU_TIME_LOG=1` for frame times in klog).
 
 The home-screen art (`ps5/art`, converted by `ps5/art/make-title-art.sh`) is
 the port's own, made with ChatGPT in the look of the game's cover; nothing in it

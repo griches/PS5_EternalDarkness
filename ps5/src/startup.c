@@ -10,6 +10,7 @@
  */
 #include <dirent.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -85,12 +86,39 @@ seed_shader_caches(void)
    }
 }
 
+/* /app0/env.txt: KEY=VALUE lines, the recomp's options for a test run
+ * (ED_QUICKLOAD=saves/slot1.state, AURORA_GPU_TIME_LOG=1, ...), since the
+ * console starts a title with no arguments or environment. Set for the C
+ * library's getenv (the recomp) and in SDL's copy of the environment (Aurora). */
+static void
+load_env_file(void)
+{
+   char line[1024];
+   FILE *file = fopen(TITLE_DIR "/env.txt", "r");
+
+   if (file == NULL)
+      return;
+   while (fgets(line, sizeof(line), file) != NULL) {
+      char *equals, *end = line + strcspn(line, "\r\n");
+
+      *end = '\0';
+      if (line[0] == '#' || (equals = strchr(line, '=')) == NULL || equals == line)
+         continue;
+      *equals = '\0';
+      setenv(line, equals + 1, 1);
+      SDL_SetEnvironmentVariable(SDL_GetEnvironment(), line, equals + 1, true);
+      fprintf(stderr, "env.txt: %s=%s\n", line, equals + 1);
+   }
+   fclose(file);
+}
+
 __attribute__((constructor)) static void
 ps5_startup(void)
 {
    platform_init(PS5_TITLE_NAME);
    if (chdir(TITLE_DIR) != 0)
       fprintf(stderr, "startup: cannot enter " TITLE_DIR "\n");
+   load_env_file();
    mkdir(CACHE_DIR, 0777);
    seed_shader_caches();
    /* SDL_GetPrefPath is $XDG_DATA_HOME/<org>/<app>/. A title sees its own folder
