@@ -1,0 +1,45 @@
+diff --git a/graphics/aurora/lib/dawn/BackendBinding.cpp b/graphics/aurora/lib/dawn/BackendBinding.cpp
+index bb8fba4..393914e 100644
+--- a/graphics/aurora/lib/dawn/BackendBinding.cpp
++++ b/graphics/aurora/lib/dawn/BackendBinding.cpp
+@@ -14,7 +14,17 @@ std::shared_ptr<wgpu::ChainedStruct> SetupWindowAndGetSurfaceDescriptor(SDL_Wind
+   return SetupWindowAndGetSurfaceDescriptorCocoa(window);
+ #else
+   const auto props = SDL_GetWindowProperties(window);
+-#if defined(SDL_PLATFORM_ANDROID)
++#if defined(__PROSPERO__)
++  // PlayStation 5: one output and no window. Dawn's PS5 port (ps5/patches/dawn.patch)
++  // takes the Android native-window descriptor for it (VK_KHR_display underneath);
++  // any token will do.
++  (void)props;
++  static int output;
++  std::shared_ptr<wgpu::SurfaceSourceAndroidNativeWindow> desc =
++      std::make_shared<wgpu::SurfaceSourceAndroidNativeWindow>();
++  desc->window = &output;
++  return std::move(desc);
++#elif defined(SDL_PLATFORM_ANDROID)
+   std::shared_ptr<wgpu::SurfaceSourceAndroidNativeWindow> desc =
+       std::make_shared<wgpu::SurfaceSourceAndroidNativeWindow>();
+   desc->window = SDL_GetPointerProperty(props, SDL_PROP_WINDOW_ANDROID_WINDOW_POINTER, nullptr);
+diff --git a/graphics/aurora/lib/imgui.cpp b/graphics/aurora/lib/imgui.cpp
+index bcc38f3..926f86c 100644
+--- a/graphics/aurora/lib/imgui.cpp
++++ b/graphics/aurora/lib/imgui.cpp
+@@ -197,9 +197,17 @@ void render(const wgpu::RenderPassEncoder& pass, const DrawData& drawData) noexc
+     ImGui_ImplSDLRenderer3_RenderDrawData(data, renderer);
+     SDL_RenderPresent(renderer);
+   } else {
++#if defined(__PROSPERO__)
++    // PS5 port: no debug group. Some builds of another title on this stack died
++    // here at the first frame with anything to draw (a check in Dawn's
++    // AddNullTerminatedString, under PushDebugGroup); the group only labels the
++    // pass for a GPU debugger, which the console has none of.
++    ImGui_ImplWGPU_RenderDrawData(data, pass.Get());
++#else
+     pass.PushDebugGroup("Aurora: Dear Imgui");
+     ImGui_ImplWGPU_RenderDrawData(data, pass.Get());
+     pass.PopDebugGroup();
++#endif
+   }
+ }
+ 

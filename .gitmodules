@@ -1,0 +1,3 @@
+[submodule "vendor/edrecomp"]
+	path = vendor/edrecomp
+	url = https://github.com/griches/EternalDarknessRecomp.git

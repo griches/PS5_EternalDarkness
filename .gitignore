@@ -1,0 +1,16 @@
+.DS_Store
+build/
+dist/
+klog/
+.deps/
+# never: the disc, or the code translated from it
+dump/
+gamedata/
+*.iso
+*.ciso
+*.gcm
+*.rvz
+*.gci
+*.state
+*.log
+imgui.ini
