@@ -1,5 +1,9 @@
 # Eternal Darkness for the PlayStation 5
 
+[![stars](https://img.shields.io/github/stars/griches/PS5_EternalDarkness?style=flat)](https://github.com/griches/PS5_EternalDarkness/stargazers)
+[![release](https://img.shields.io/github/v/release/griches/PS5_EternalDarkness)](https://github.com/griches/PS5_EternalDarkness/releases/latest)
+[![licence](https://img.shields.io/badge/licence-GPL--3.0-blue)](LICENSE)
+
 **Eternal Darkness: Sanity's Requiem** (GameCube, 2002) as PS5 homebrew, title
 `PPSA99314`, at 4K and 60 frames a second, built from
 [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp) and
