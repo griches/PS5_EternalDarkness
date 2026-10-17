@@ -141,6 +141,9 @@ ps5_startup(void)
 {
    platform_init(PS5_TITLE_NAME);
    load_env_file();
+   /* 120 Hz output on a TV that runs it as VRR (ps5/patches/radv.patch): the
+    * screen the frames in between are drawn for. env.txt may say 0. */
+   setenv("PS5_VIDEOOUT_VRR", "1", 0);
    mkdir(CACHE_DIR, 0777);
    seed_shader_caches();
    /* SDL_GetPrefPath is $XDG_DATA_HOME/<org>/<app>/. A title sees its own folder

@@ -24,6 +24,8 @@ generated=$(bash "$ps5/tools/setup-source.sh")
 dawn=$(bash "$ps5/tools/setup-dawn.sh")
 sdl=$(bash "$ps5/tools/setup-sdl.sh")
 sdk=$(bash "$ps5/tools/setup-sdk.sh")
+# The title's own RADV (120 Hz on a VRR TV); link-title.sh links RADV_ARCHIVE.
+export RADV_ARCHIVE=${RADV_ARCHIVE:-$(PS5_VULKAN_DIR="$vulkan" bash "$ps5/tools/setup-radv.sh")}
 build=${PS5_BUILD_DIR:-$root/build/game}
 ninja=$(command -v ninja || echo "$HOME/.local/bin/ninja")
 export PS5_CLANG=${PS5_CLANG:-$(command -v clang || true)}
