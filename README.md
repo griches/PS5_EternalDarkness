@@ -12,20 +12,22 @@
 
 - A PS5 that runs homebrew (etaHEN or similar), with ShadowMountPlus and an FTP
   server (port 2121).
-- Your own European disc image.
-- The title built from it (see [Build](#build)), which gives `dist/PPSA99314/`.
-  The title holds code translated from your disc, so there is no download.
+- Your own image of the European disc: an `.iso` or `.gcm` (not a compressed
+  RVZ or CISO).
 
 ## Install
 
-1. Copy `dist/PPSA99314/` to the console as `/data/homebrew/PPSA99314/`
-   (`ps5/tools/console.sh deploy` does it over FTP). Include `sce_sys/icon0.png`
-   in the first upload: ShadowMountPlus will not register a title without it.
-2. Copy your disc image to `/data/homebrew/PPSA99314/dump/GEDP01.iso`, and the
-   build's `gamedata/GEDP01/main.dol` to `/data/homebrew/PPSA99314/generated/main.dol`
-   (`ps5/tools/console.sh game-files` does both).
-3. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
-   does not appear, restart ShadowMountPlus.
+1. Download `EternalDarkness-PS5-....zip` from the release and unzip it: a
+   `PPSA99314` folder.
+2. Copy that folder to the console as `/data/homebrew/PPSA99314/` over FTP.
+   Include `sce_sys/icon0.png` in the first upload: ShadowMountPlus will not
+   register a title without it.
+3. Put your disc image in `/data/homebrew/PPSA99314/dump/` (any name).
+4. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
+   does not appear, restart ShadowMountPlus. The first start reads the game's
+   program from your disc (a second or two), then the launcher offers the disc.
+
+Nothing from the game is in the download: the game's files come from your disc.
 
 Saves and settings stay in `/data/homebrew/PPSA99314/` (`saves/`, `settings.ini`,
 and the memory cards `ed-GEDP01-slot-a.dolcard` and `...-slot-b.dolcard`).
@@ -136,9 +138,11 @@ ps5/tools/vm.sh deploy                  # FTP to the console (PS5_HOST)
 ps5/tools/vm.sh run                     # launch and follow klog
 ```
 
-On the console the title folder also needs the disc and the translated
-`main.dol`: `dump/<id>.iso` and `generated/main.dol` under
-`/data/homebrew/PPSA99314/` (`ps5/tools/console.sh game-files`).
+On the console the title folder also needs the disc, `dump/<id>.iso` under
+`/data/homebrew/PPSA99314/`; the title reads `generated/main.dol` out of it on
+its first start (`ps5/tools/console.sh game-files` copies both instead).
+`ps5/tools/package-release.sh VERSION` zips `dist/PPSA99314/` for a release, with an empty
+`dump/` for the disc.
 `ps5/tools/console.sh` also deploys and runs from macOS itself, for when the VM
 cannot reach the console, and writes the title's `env.txt`: `KEY=VALUE` lines
 the recomp reads as its environment (for example `ED_QUICKLOAD=saves/slot1.state`
