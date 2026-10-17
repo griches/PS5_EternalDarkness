@@ -27,7 +27,7 @@
    does not appear, restart ShadowMountPlus. The first start reads the game's
    program from your disc (a second or two), then the launcher offers the disc.
 
-Nothing from the game is in the download: the game's files come from your disc.
+The game's files (its program, graphics, sound and music) come from your disc.
 
 Saves and settings stay in `/data/homebrew/PPSA99314/` (`saves/`, `settings.ini`,
 and the memory cards `ed-GEDP01-slot-a.dolcard` and `...-slot-b.dolcard`).
