@@ -9,7 +9,7 @@ and **your own disc**.
 **You need**
 - A PS5 that runs homebrew (etaHEN or similar), with ShadowMountPlus and an FTP
   server (port 2121).
-- Your own disc image: Europe `GEDP01` or USA `GEDE01`.
+- Your own disc image of the **European disc**, `GEDP01`. The USA disc is not supported.
 - The title built from it (see [Build](#build)), which gives `dist/PPSA99314/`. The
   title holds code translated from your disc, so there is no download.
 
@@ -17,8 +17,7 @@ and **your own disc**.
 1. Copy `dist/PPSA99314/` to the console as `/data/homebrew/PPSA99314/`
    (`ps5/tools/console.sh deploy` does it over FTP). Include `sce_sys/icon0.png`
    in the first upload: ShadowMountPlus will not register a title without it.
-2. Copy your disc image to `/data/homebrew/PPSA99314/dump/GEDP01.iso` (or
-   `GEDE01.iso`), and the build's `gamedata/<id>/main.dol` to
+2. Copy your disc image to `/data/homebrew/PPSA99314/dump/GEDP01.iso`, and the build's `gamedata/<id>/main.dol` to
    `/data/homebrew/PPSA99314/generated/main.dol` (`ps5/tools/console.sh game-files`
    does both).
 3. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
@@ -35,6 +34,10 @@ and **your own disc**.
 - Saves and settings stay in `/data/homebrew/PPSA99314/`: `saves/`, `settings.ini`
   and `ed-GEDP01-slot-a.dolcard` (the game's memory card; `...-slot-b.dolcard` is slot B).
   Copying a new build over the folder leaves them alone.
+- If the game stops responding, stops or crashes, it writes a report to
+  `/data/homebrew/PPSA99314/saves/reports/` (for a hang, with a `.state` of that
+  moment). Fetch those files over FTP and send them with a few words on what you
+  were doing.
 
 ## How it works
 
@@ -62,7 +65,7 @@ PS5_Mesa, PS5_PayloadSDK, LLVM 22):
 
 ```sh
 git submodule update --init
-cp /path/to/GEDP01.iso dump/            # or GEDE01: your own disc
+cp /path/to/GEDP01.iso dump/            # your own European disc
 ps5/tools/vm.sh build                   # -> dist/PPSA99314/
 ps5/tools/vm.sh deploy                  # FTP to the console (PS5_HOST)
 ps5/tools/vm.sh run                     # launch and follow klog
