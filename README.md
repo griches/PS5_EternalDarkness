@@ -20,8 +20,6 @@
 1. Download `EternalDarkness-PS5-....zip` from the release and unzip it: a
    `PPSA99314` folder.
 2. Copy that folder to the console as `/data/homebrew/PPSA99314/` over FTP.
-   Include `sce_sys/icon0.png` in the first upload: ShadowMountPlus will not
-   register a title without it.
 3. Put your disc image in `/data/homebrew/PPSA99314/dump/` (any name).
 4. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
    does not appear, restart ShadowMountPlus. The first start reads the game's
