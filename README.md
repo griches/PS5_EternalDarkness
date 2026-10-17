@@ -1,43 +1,98 @@
 # Eternal Darkness for the PlayStation 5
 
-**Eternal Darkness: Sanity's Requiem** (GameCube) as PS5 homebrew, title `PPSA99314`,
-built from [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp)
-and **your own disc**.
+**Eternal Darkness: Sanity's Requiem** (GameCube, 2002) as PS5 homebrew, title
+`PPSA99314`, at 4K and 60 frames a second, built from
+[Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp) and
+**your own disc**. Version 0.8.0.
 
-## Quick start
+> **European disc only.** You need your own image of the **European GameCube disc,
+> `GEDP01`**. The USA disc (`GEDE01`) is not supported.
 
-**You need**
+## What you need
+
 - A PS5 that runs homebrew (etaHEN or similar), with ShadowMountPlus and an FTP
   server (port 2121).
-- Your own disc image of the **European disc**, `GEDP01`. The USA disc is not supported.
-- The title built from it (see [Build](#build)), which gives `dist/PPSA99314/`. The
-  title holds code translated from your disc, so there is no download.
+- Your own European disc image.
+- The title built from it (see [Build](#build)), which gives `dist/PPSA99314/`.
+  The title holds code translated from your disc, so there is no download.
 
-**Install**
+## Install
+
 1. Copy `dist/PPSA99314/` to the console as `/data/homebrew/PPSA99314/`
    (`ps5/tools/console.sh deploy` does it over FTP). Include `sce_sys/icon0.png`
    in the first upload: ShadowMountPlus will not register a title without it.
-2. Copy your disc image to `/data/homebrew/PPSA99314/dump/GEDP01.iso`, and the build's `gamedata/<id>/main.dol` to
-   `/data/homebrew/PPSA99314/generated/main.dol` (`ps5/tools/console.sh game-files`
-   does both).
+2. Copy your disc image to `/data/homebrew/PPSA99314/dump/GEDP01.iso`, and the
+   build's `gamedata/GEDP01/main.dol` to `/data/homebrew/PPSA99314/generated/main.dol`
+   (`ps5/tools/console.sh game-files` does both).
 3. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
    does not appear, restart ShadowMountPlus.
 
-**HD textures**
-1. Get a Dolphin HD texture pack for Eternal Darkness (a folder of `tex1_....png` files).
-2. Copy those files (any subfolders are fine) to `/data/homebrew/PPSA99314/textures/`.
-   A full pack is several GB, so the copy takes a while.
-3. Start the title again. Options > HD textures turns the pack on and off.
+Saves and settings stay in `/data/homebrew/PPSA99314/` (`saves/`, `settings.ini`,
+and the memory cards `ed-GEDP01-slot-a.dolcard` and `...-slot-b.dolcard`).
+Copying a new build over the folder leaves them, the disc and the texture pack
+alone.
 
-**Playing**
-- The DualSense's **Create** button opens the pause menu: four save slots, Options, Quit.
-- Saves and settings stay in `/data/homebrew/PPSA99314/`: `saves/`, `settings.ini`
-  and `ed-GEDP01-slot-a.dolcard` (the game's memory card; `...-slot-b.dolcard` is slot B).
-  Copying a new build over the folder leaves them alone.
-- If the game stops responding, stops or crashes, it writes a report to
-  `/data/homebrew/PPSA99314/saves/reports/` (for a hang, with a `.state` of that
-  moment). Fetch those files over FTP and send them with a few words on what you
-  were doing.
+## HD texture pack
+
+1. Get a Dolphin HD texture pack for Eternal Darkness: a folder of `tex1_....png`
+   files.
+2. Copy those files (any subfolders are fine) to
+   `/data/homebrew/PPSA99314/textures/`. A full pack is several GB, so the copy
+   takes a while.
+3. Start the title again: it finds the pack when it starts. **Options > Game >
+   HD textures** turns it on and off while you play.
+
+## What is better than on the GameCube
+
+- **4K at 60 frames a second**, with full colour (no 6-bit banding). Options can
+  also draw at 720p, 1080p or 1440p.
+- **Widescreen**: the game's own 16:9 mode (more of the room at the sides, not
+  stretched) with the HUD and prompts at the screen's edges; 4:3 too.
+- **New baked shadows** (below): the rooms' light and shadow redrawn sharp.
+- **Crisp game text**: the game's lettering redrawn in two styles, *Sharp* or
+  *Tome* (old typefaces), or *Original* as on the disc.
+- **HD texture packs** in Dolphin's format.
+- **Modern controls** and remapping, with PlayStation button prompts, the game's
+  own prompts included.
+- **Save anywhere**: the pause menu has four save slots that hold the whole
+  moment, besides the game's own memory-card saves (slots A and B).
+- **A launcher**: Continue, New game or any save slot straight from the start.
+- **Problem reports**: if the game stops responding, stops or crashes, it says
+  so on screen and writes a report to `saves/reports/` (fetch it over FTP and
+  send it with a few words on what you were doing).
+- **Shaders ready**: the title ships the shader caches a console made, so a fresh
+  install starts without compiling them.
+
+## Controls
+
+| Action | Modern (default) | Original (GameCube positions) |
+| --- | --- | --- |
+| Move | Left stick | Left stick |
+| Attack / Confirm | R2 or Cross | Cross |
+| Action / Cancel | Circle | Circle |
+| Target / Aim | L2 or R1 | R2 |
+| Sprint | L3 (toggle), or hold L1 | L2 |
+| Creep | R3 (toggle) | Square |
+| Reload | Square | R1 |
+| Quickcast | Triangle | Triangle |
+| Spells | D-pad | D-pad |
+| Game's pause menu | Options | Options |
+| This port's menu (saves, options) | Create | Create |
+
+In the game's own menus L1 and R1 page left and right. **Options > Controls**
+switches layout, makes Sprint, Creep and Target hold or toggle, sets the stick
+deadzone and vibration, and **Button mapping** rebinds any action (that layout is
+*Custom*).
+
+## The new baked shadows
+
+Eternal Darkness lights its rooms with pre-drawn light maps: the window light on
+the floors, the shadows under the furniture, the glow of the lamps. On the disc
+they are small and compressed, so at 4K their edges break up into blocks and
+smears. With **Options > Game > Baked shadows: Sharp** (the default) each room's
+light maps are rebuilt four times larger as the room loads, with the compression
+blocks evened out and edges doubled along their own direction, so light and
+shadow keep clean edges. **Original** shows them as on the disc.
 
 ## How it works
 
@@ -57,6 +112,11 @@ and **your own disc**.
 - `ps5/src/startup.c` runs before the game: klog, the title folder as the
   working folder (the recomp finds `generated/main.dol`, `dump/<id>.iso`,
   `res/`, `saves/` and `settings.ini` there) and the caches in `cache/`.
+- `ps5/shader-cache` holds the shader caches a console filled (Dawn's
+  `dawn_cache.db` and the driver's `radv-shader-cache`). `link-title.sh` puts them
+  in `res/shader-cache` and `startup.c` copies them into place on a start that has
+  none. Take them from a console again after a change to Dawn, Mesa or the
+  shaders.
 
 ## Build
 
@@ -91,3 +151,5 @@ beside this repo).
 
 GPL-3.0-or-later, as Eternal Darkness Recomp and GXRuntime. The PS5 layer
 (`ps5/src`, `ps5/sdl`, `ps5/tools`) comes from the author's other PS5 ports.
+The title carries every component's licence text in `licenses/` (the recomp's
+`THIRD_PARTY.md` lists them, and SDL, Dawn, Mesa and PS5_Vulkan are added).
