@@ -214,10 +214,18 @@ if [[ -f $ps5/shader-cache/dawn_cache.db ]]; then
     mkdir -p "$app/res/shader-cache"
     cp -R "$ps5/shader-cache/." "$app/res/shader-cache/"
 fi
-# The licences beside eboot.bin
-mkdir -p "$app/licenses"
-cp "$recomp/LICENSE" "$app/licenses/EternalDarknessRecomp-LICENSE.txt"
-cp "$root/.deps/GXRuntime/LICENSE" "$app/licenses/GXRuntime-LICENSE.txt" 2>/dev/null || true
-cp "$root/.deps/GXRuntime/graphics/aurora/LICENSE" "$app/licenses/Aurora-LICENSE.txt"
-cp "$root/.deps/DolRecomp/LICENSE" "$app/licenses/DolRecomp-LICENSE.txt" 2>/dev/null || true
-cp "$vulkan/LICENSE" "$app/licenses/PS5_Vulkan-LICENSE.txt"
+# The licences beside eboot.bin: the recomp's set (its THIRD_PARTY.md as
+# README.md, every component's text, the libraries this build fetched) and what
+# only the console's build has: SDL and Dawn built from .deps (with the Abseil
+# Dawn carries), Mesa's RADV and PS5_Vulkan.
+rm -rf "$app/licenses"
+DEPS="$root/.deps" bash "$recomp/tools/collect-licenses.sh" "$app/licenses" "$work"
+cp "$root/.deps/SDL/LICENSE.txt" "$app/licenses/sdl.txt"
+cp "$root/.deps/dawn/third_party/abseil-cpp/LICENSE" "$app/licenses/abseil-cpp.txt"
+cp "$vulkan/LICENSE" "$app/licenses/PS5_Vulkan.txt"
+mesa=$(dirname "$vulkan")/PS5_Mesa
+if [[ -f $mesa/docs/license.rst ]]; then
+    cp "$mesa/docs/license.rst" "$app/licenses/Mesa.txt"
+else
+    echo "link-title.sh: no Mesa licence at $mesa/docs/license.rst" >&2
+fi
