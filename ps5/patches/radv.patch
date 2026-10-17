@@ -1,19 +1,17 @@
---- a/src/vulkan/wsi/wsi_common_videoout.c	2026-10-17 19:02:51.218979680 +0100
-+++ b/src/vulkan/wsi/wsi_common_videoout.c	2026-10-17 19:02:51.219979565 +0100
-@@ -384,7 +384,18 @@
+--- a/src/vulkan/wsi/wsi_common_videoout.c	2026-10-17 19:13:51.903804987 +0100
++++ b/src/vulkan/wsi/wsi_common_videoout.c	2026-10-17 19:13:51.903804987 +0100
+@@ -384,7 +384,16 @@
        out->high_frame_rate = configured == 0;
        if (out->high_frame_rate) {
           const uint64_t period = videoout_vblank_period_ns(out->handle);
 -         if (period > VIDEOOUT_HIGH_REFRESH_LIMIT_NS) {
 +         /* Eternal Darkness port: with VRR (the system turns a 119.88 Hz
 +          * request into VRR 119.88 Hz) the TV refreshes as flips arrive and,
-+          * with none pending, idles at the bottom of its range (48 Hz on a
-+          * TV whose range starts there): longer than a 60 Hz display's
-+          * 16.7 ms, which a display really at 60 Hz would give.
-+          * PS5_VIDEOOUT_VRR=1 takes that as the 120 Hz output it is. */
-+         const char *const vrr = getenv("PS5_VIDEOOUT_VRR");
-+         const bool idle_vrr = vrr != NULL && vrr[0] == '1' && period > UINT64_C(18000000);
-+         if (idle_vrr) {
++          * with none pending, idles at the bottom of its range (a vblank
++          * every 20.9 ms on a TV whose range starts at 48 Hz). A display
++          * really at 60 Hz gives 16.7 ms, so anything slower than 55 Hz is
++          * the VRR output, and 120 Hz is kept. */
++         if (period > UINT64_C(18000000)) {
 +            fprintf(stderr, "wsi/videoout: 119.88 Hz with VRR (idle, a vblank every %.3f ms)\n",
 +                    (double)period / 1e6);
 +         } else if (period > VIDEOOUT_HIGH_REFRESH_LIMIT_NS) {
