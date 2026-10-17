@@ -23,11 +23,12 @@ ftp="ftp://$host:2121/data/homebrew/$title_id"
 
 case ${1:?usage: console.sh deploy|game-files|run|env|quit} in
 deploy)
-    # The art always goes: the tool skips a file whose size matches the console's
-    # copy, and every 3840x2160 pic0/pic1.dds has the same size. The home screen
-    # shows the copy in /user/appmeta/<TITLE_ID>, taken when the title was
-    # registered, so that one is refreshed too.
-    art=(sce_sys/icon0.png sce_sys/pic0.dds sce_sys/pic1.dds)
+    # The art and tile music always go: the tool skips a file whose size matches
+    # the console's copy, and every 3840x2160 pic0/pic1.dds has the same size, as
+    # does every 30 s snd0.at9. The home screen shows the copy in
+    # /user/appmeta/<TITLE_ID>, taken when the title was registered, so that one
+    # is refreshed too.
+    art=(sce_sys/icon0.png sce_sys/pic0.dds sce_sys/pic1.dds sce_sys/snd0.at9)
     always=(--always eboot.bin)
     for file in "${art[@]}"; do always+=(--always "$file"); done
     # res/ (12 MB) always goes in full too: its images change without changing
