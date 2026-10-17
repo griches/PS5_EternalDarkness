@@ -1,10 +1,40 @@
 # Eternal Darkness for the PlayStation 5
 
-A PS5 homebrew build of [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp),
-the static recompilation of **Eternal Darkness: Sanity's Requiem** (GameCube), as
-title `PPSA99314`. The game code is translated from **your own disc**; nothing of
-the game is in this repository, and a built title holds code made from the disc,
-so it stays with whoever built it.
+**Eternal Darkness: Sanity's Requiem** (GameCube) as PS5 homebrew, title `PPSA99314`,
+built from [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp)
+and **your own disc**.
+
+## Quick start
+
+**You need**
+- A PS5 that runs homebrew (etaHEN or similar), with ShadowMountPlus and an FTP
+  server (port 2121).
+- Your own disc image: Europe `GEDP01` or USA `GEDE01`.
+- The title built from it (see [Build](#build)), which gives `dist/PPSA99314/`. The
+  title holds code translated from your disc, so there is no download.
+
+**Install**
+1. Copy `dist/PPSA99314/` to the console as `/data/homebrew/PPSA99314/`
+   (`ps5/tools/console.sh deploy` does it over FTP). Include `sce_sys/icon0.png`
+   in the first upload: ShadowMountPlus will not register a title without it.
+2. Copy your disc image to `/data/homebrew/PPSA99314/dump/GEDP01.iso` (or
+   `GEDE01.iso`), and the build's `gamedata/<id>/main.dol` to
+   `/data/homebrew/PPSA99314/generated/main.dol` (`ps5/tools/console.sh game-files`
+   does both).
+3. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
+   does not appear, restart ShadowMountPlus.
+
+**HD textures**
+1. Get a Dolphin HD texture pack for Eternal Darkness (a folder of `tex1_....png` files).
+2. Copy those files (any subfolders are fine) to `/data/homebrew/PPSA99314/textures/`.
+   A full pack is several GB, so the copy takes a while.
+3. Start the title again. Options > HD textures turns the pack on and off.
+
+**Playing**
+- The DualSense's **Create** button opens the pause menu: four save slots, Options, Quit.
+- Saves and settings stay in `/data/homebrew/PPSA99314/`: `saves/`, `settings.ini`
+  and `ed-GEDP01-slot-a.dolcard` (the game's memory card; `...-slot-b.dolcard` is slot B).
+  Copying a new build over the folder leaves them alone.
 
 ## How it works
 
