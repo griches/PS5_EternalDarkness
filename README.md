@@ -35,12 +35,17 @@ alone.
 ## HD texture pack
 
 1. Get a Dolphin HD texture pack for Eternal Darkness: a folder of `tex1_....png`
-   files.
+   or `tex1_....dds` files. A DDS pack (BC7) stays compressed in the console's
+   graphics memory, a quarter of a PNG pack's.
 2. Copy those files (any subfolders are fine) to
    `/data/homebrew/PPSA99314/textures/`. A full pack is several GB, so the copy
    takes a while.
 3. Start the title again: it finds the pack when it starts. **Options > Game >
    HD textures** turns it on and off while you play.
+
+Packs can sit side by side in `textures/`; where two have the same texture, a
+folder with *supplement* or *override* in its name wins (such as the PAL
+supplement: the European disc's screens and words the main pack misses).
 
 ## What is better than on the GameCube
 
