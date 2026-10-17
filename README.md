@@ -10,42 +10,88 @@
 
 ## What you need
 
-- A PS5 that runs homebrew (etaHEN or similar), with ShadowMountPlus and an FTP
-  server (port 2121).
-- Your own image of the European disc: an `.iso` or `.gcm` (not a compressed
-  RVZ or CISO).
+- A PS5 that runs homebrew (etaHEN or similar), with **ShadowMountPlus** and an
+  **FTP server** (port 2121).
+- Your own image of the European disc: an `.iso` or `.gcm` file (not a
+  compressed RVZ or CISO).
+- On your computer: an FTP program (FileZilla, for example) and a program that
+  opens `.7z` files (7-Zip on Windows, Keka or The Unarchiver on a Mac).
 
-## Install
+## Set it up
 
-1. Download `EternalDarkness-PS5-....zip` from the release and unzip it: a
-   `PPSA99314` folder.
-2. Copy that folder to the console as `/data/homebrew/PPSA99314/` over FTP.
-3. Put your disc image in `/data/homebrew/PPSA99314/dump/` (any name).
-4. Wait for **Eternal Darkness** to appear on the home screen and start it. If it
-   does not appear, restart ShadowMountPlus. The first start reads the game's
-   program from your disc (a second or two), then the launcher offers the disc.
+### 1. The game
+
+1. Download `EternalDarkness-PS5-....zip` from the
+   [latest release](https://github.com/griches/PS5_EternalDarkness/releases/latest)
+   and unzip it. You get a folder called `PPSA99314`.
+2. Copy that folder to the console over FTP, as `/data/homebrew/PPSA99314/`.
+3. Copy your disc image into `/data/homebrew/PPSA99314/dump/`. Any file name
+   works.
+
+### 2. The HD textures (recommended)
+
+Two downloads, both DDS:
+
+| Download | What it is | Size |
+| --- | --- | --- |
+| **[Eternal Darkness HD Texture Pack](https://mega.nz/file/6m5TQToI#v09Y_gYdtZ24WTT6BlfCeM5uvw1nRs3QozcYZkUVVqg)** by Zombie | The game's textures redrawn at four times the detail | 2.9 GB `.7z` on Mega |
+| **[PAL supplement](https://www.bouncingball.mobi/eternaldarkness/files/ED-PAL-supplement-dds.zip?v=2)** by Eternal Darkness Recomp | What the pack misses on the European disc: the Jump to Game, Options and Language screens and the title menu's words, and highlights without hard edges | 10.7 MB `.zip` |
+
+1. Unpack both on your computer. Each one gives you a folder.
+2. Make a folder called `textures` in `/data/homebrew/PPSA99314/` and copy both
+   folders into it. The pack is a few GB, so this takes a while.
+
+Leave both folders as they are: the supplement replaces some of the pack's
+textures on purpose, and a folder with *supplement* in its name always wins.
+DDS stays compressed in the console's graphics memory, a quarter of the room
+PNG takes. PNG versions of both are on the
+[website](https://www.bouncingball.mobi/eternaldarkness/#hd) if you need them.
+
+The pack is the work of **Zombie**, shared on the
+[Dolphin forums](https://forums.dolphin-emu.org/Thread-eternal-darkness-hd).
+
+### 3. Check the folder
+
+When you're done it looks like this:
+
+```
+/data/homebrew/PPSA99314/
+├── eboot.bin, sce_sys/, res/, ...    from the release zip
+├── dump/
+│   └── your disc image (.iso or .gcm)
+└── textures/
+    ├── GED DDS 1.0/                   Zombie's pack (any folder name works)
+    └── Eternal Darkness HD Texture Pack PAL supplement/
+```
+
+### 4. Play
+
+1. Start **Eternal Darkness** from the home screen.
+2. The first start reads the game's program from your disc, which takes a
+   second or two. Then the launcher shows your disc.
+3. Choose **New game**.
+
+The defaults are already the best picture: 4K, widescreen, HD textures on and
+sharp baked shadows. In **Options > Game**, **HD textures** should say **On**,
+and its note gives the number of textures it found.
+
+### If something's wrong
+
+- **It isn't on the home screen**: restart ShadowMountPlus (or the console).
+- **The launcher's Disc says None found**: the image isn't in `dump/`, or it's
+  a compressed RVZ or CISO. A USA disc shows up but can't be played.
+- **HD textures says No pack**: the pack isn't inside `textures/`. Check the
+  folder against the one above, then close the game and start it again: it
+  looks for the pack as it starts.
+
+### Updating
+
+Copy a new release's `PPSA99314` folder over the old one. Saves, settings, your
+disc and the textures stay as they are: saves and settings live in
+`/data/homebrew/PPSA99314/` (`saves/`, `settings.ini`, and the memory cards
+`ed-GEDP01-slot-a.dolcard` and `...-slot-b.dolcard`).
 
 The game's files (its program, graphics, sound and music) come from your disc.
-
-Saves and settings stay in `/data/homebrew/PPSA99314/` (`saves/`, `settings.ini`,
-and the memory cards `ed-GEDP01-slot-a.dolcard` and `...-slot-b.dolcard`).
-Copying a new build over the folder leaves them, the disc and the texture pack
-alone.
-
-## HD texture pack
-
-1. Get a Dolphin HD texture pack for Eternal Darkness: a folder of `tex1_....png`
-   or `tex1_....dds` files. A DDS pack (BC7) stays compressed in the console's
-   graphics memory, a quarter of a PNG pack's.
-2. Copy those files (any subfolders are fine) to
-   `/data/homebrew/PPSA99314/textures/`. A full pack is several GB, so the copy
-   takes a while.
-3. Start the title again: it finds the pack when it starts. **Options > Game >
-   HD textures** turns it on and off while you play.
-
-Packs can sit side by side in `textures/`; where two have the same texture, a
-folder with *supplement* or *override* in its name wins (such as the PAL
-supplement: the European disc's screens and words the main pack misses).
 
 ## What is better than on the GameCube
 
@@ -58,7 +104,7 @@ supplement: the European disc's screens and words the main pack misses).
   *Tome* (old typefaces), or *Original* as on the disc.
 - **HD texture packs** in Dolphin's format.
 - **Modern controls** and remapping, with PlayStation button prompts, the game's
-  own prompts included.
+  own prompts included (the icons below are the game's own).
 - **Save anywhere**: the pause menu has four save slots that hold the whole
   moment, besides the game's own memory-card saves (slots A and B).
 - **A launcher**: Continue, New game or any save slot straight from the start.
@@ -72,17 +118,17 @@ supplement: the European disc's screens and words the main pack misses).
 
 | Action | Modern (default) | Original (GameCube positions) |
 | --- | --- | --- |
-| Move | Left stick | Left stick |
-| Attack / Confirm | R2 or Cross | Cross |
-| Action / Cancel | Circle | Circle |
-| Target / Aim | L2 or R1 | R2 |
-| Sprint | L3 (toggle), or hold L1 | L2 |
-| Creep | R3 (toggle) | Square |
-| Reload | Square | R1 |
-| Quickcast | Triangle | Triangle |
-| Spells | D-pad | D-pad |
-| Game's pause menu | Options | Options |
-| This port's menu (saves, options) | Create | Create |
+| Move | <img src="docs/glyphs/stick_l.png" width="30" alt="Left stick"> | <img src="docs/glyphs/stick_l.png" width="30" alt="Left stick"> |
+| Attack / Confirm | <img src="docs/glyphs/rt.png" width="30" alt="R2"> or <img src="docs/glyphs/south.png" width="30" alt="Cross"> | <img src="docs/glyphs/south.png" width="30" alt="Cross"> |
+| Action / Cancel | <img src="docs/glyphs/east.png" width="30" alt="Circle"> | <img src="docs/glyphs/east.png" width="30" alt="Circle"> |
+| Target / Aim | <img src="docs/glyphs/lt.png" width="30" alt="L2"> or <img src="docs/glyphs/rb.png" width="30" alt="R1"> | <img src="docs/glyphs/rt.png" width="30" alt="R2"> |
+| Sprint | <img src="docs/glyphs/l3.png" width="30" alt="L3"> toggle, or hold <img src="docs/glyphs/lb.png" width="30" alt="L1"> | <img src="docs/glyphs/lt.png" width="30" alt="L2"> |
+| Creep | <img src="docs/glyphs/r3.png" width="30" alt="R3"> toggle | <img src="docs/glyphs/west.png" width="30" alt="Square"> |
+| Reload | <img src="docs/glyphs/west.png" width="30" alt="Square"> | <img src="docs/glyphs/rb.png" width="30" alt="R1"> |
+| Quickcast | <img src="docs/glyphs/north.png" width="30" alt="Triangle"> | <img src="docs/glyphs/north.png" width="30" alt="Triangle"> |
+| Spells | <img src="docs/glyphs/dpad.png" width="30" alt="D-pad"> | <img src="docs/glyphs/dpad.png" width="30" alt="D-pad"> |
+| Game's pause menu | <img src="docs/glyphs/start.png" width="30" alt="Options"> | <img src="docs/glyphs/start.png" width="30" alt="Options"> |
+| This port's menu (saves, options) | <img src="docs/glyphs/back.png" width="30" alt="Create"> | <img src="docs/glyphs/back.png" width="30" alt="Create"> |
 
 In the game's own menus L1 and R1 page left and right. **Options > Controls**
 switches layout, makes Sprint, Creep and Target hold or toggle, sets the stick
