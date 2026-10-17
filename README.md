@@ -63,7 +63,6 @@ PS5_Mesa, PS5_PayloadSDK, LLVM 22):
 ```sh
 git submodule update --init
 cp /path/to/GEDP01.iso dump/            # or GEDE01: your own disc
-ps5/art/make-title-music.sh             # optional: the tile's music, from the disc
 ps5/tools/vm.sh build                   # -> dist/PPSA99314/
 ps5/tools/vm.sh deploy                  # FTP to the console (PS5_HOST)
 ps5/tools/vm.sh run                     # launch and follow klog
@@ -80,10 +79,10 @@ to start in a save, `AURORA_GPU_TIME_LOG=1` for frame times in klog).
 The home-screen art (`ps5/art`, converted by `ps5/art/make-title-art.sh`) is
 the port's own, made with ChatGPT in the look of the game's cover; nothing in it
 is from the game. The music that plays while the tile is highlighted is: the
-first 30 seconds of one of the game's insanity themes, which
-`ps5/art/make-title-music.sh` cuts from your disc into `ps5/sce_sys/snd0.at9`
+first 30 seconds of one of the game's insanity themes, in
+`ps5/sce_sys/snd0.at9`. `ps5/art/make-title-music.sh` remakes it from a disc
 (needs FFmpeg and [ps5-at9-converter](https://github.com/blackbearreloaded/ps5-at9-converter)
-beside this repo). Without it the tile is silent.
+beside this repo).
 
 ## Licence
 

@@ -14,5 +14,3 @@ gamedata/
 *.state
 *.log
 imgui.ini
-# the tile music is the game's own (ps5/art/make-title-music.sh makes it from the disc)
-ps5/sce_sys/snd0.at9

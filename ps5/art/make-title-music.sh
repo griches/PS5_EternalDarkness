@@ -8,8 +8,8 @@
 #
 # The first 30 s of one of the game's insanity themes (Gary's pick), faded out over the
 # last 3 s so the loop comes back into its quiet opening without a jump, at -28 LUFS
-# (written to pubtools.loudnessSnd0 in param.json). It is the game's own music, so like
-# the disc it is never committed: run this after cloning, before ps5/tools/build.sh.
+# (written to pubtools.loudnessSnd0 in param.json). The result is committed; this
+# remakes it, for example to cut a different part of the track.
 # Needs FFmpeg (for the disc's ADP audio) and ps5-at9-converter
 # (github.com/blackbearreloaded/ps5-at9-converter, beside this repo or at
 # $PS5_AT9_CONVERTER), which needs numpy.
