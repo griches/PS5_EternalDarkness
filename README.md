@@ -7,7 +7,7 @@
 **Eternal Darkness: Sanity's Requiem** (GameCube, 2002) as PS5 homebrew, title
 `PPSA99314`, at 4K and 60 frames a second, built from
 [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp) and
-**your own disc**. Version 0.8.0.
+**your own disc**. Version 0.9.0.
 
 > **European disc only.** You need your own image of the **European GameCube disc,
 > `GEDP01`**. The USA disc (`GEDE01`) is not supported.
@@ -103,6 +103,11 @@ The game's files (its program, graphics, sound and music) come from your disc.
 
 - **4K at 60 frames a second**, with full colour (no 6-bit banding). Options can
   also draw at 720p, 1080p or 1440p.
+- **120 frames a second** on a TV with a 120 Hz mode (VRR): **Options > Display >
+  Frame rate** draws a blended frame between each of the game's own (turn on
+  *Enable 120 Hz Output* in the console's Screen and Video settings).
+- **Cutscene fast-forward**: hold **R1** while a scene or movie plays to run it
+  at up to four times the speed.
 - **Widescreen**: the game's own 16:9 mode (more of the room at the sides, not
   stretched) with the HUD and prompts at the screen's edges; 4:3 too.
 - **New baked shadows** (below): the rooms' light and shadow redrawn sharp.
@@ -110,7 +115,9 @@ The game's files (its program, graphics, sound and music) come from your disc.
   *Tome* (old typefaces), or *Original* as on the disc.
 - **HD texture packs** in Dolphin's format.
 - **Modern controls** and remapping, with PlayStation button prompts, the game's
-  own prompts included (the icons below are the game's own).
+  own prompts included (the icons below are the game's own): every GameCube
+  button picture in the game, the Tome's controls page and the organ's notes
+  included, shows your controller's buttons.
 - **Save anywhere**: the pause menu has four save slots that hold the whole
   moment, besides the game's own memory-card saves (slots A and B).
 - **A launcher**: Continue, New game or any save slot straight from the start.
