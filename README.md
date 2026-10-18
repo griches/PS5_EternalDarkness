@@ -7,7 +7,7 @@
 **Eternal Darkness: Sanity's Requiem** (GameCube, 2002) as PS5 homebrew, title
 `PPSA99314`, at 4K and 60 frames a second, built from
 [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp) and
-**your own disc**. Version 0.9.0.
+**your own disc**. Version 0.9.3.
 
 > **European disc only.** You need your own image of the **European GameCube disc,
 > `GEDP01`**. The USA disc (`GEDE01`) is not supported.
@@ -108,6 +108,11 @@ The game's files (its program, graphics, sound and music) come from your disc.
   *Enable 120 Hz Output* in the console's Screen and Video settings).
 - **Cutscene fast-forward**: hold **R1** while a scene or movie plays to run it
   at up to four times the speed.
+- **Camera options** (Options > Game > Camera): the game's own fixed cameras,
+  *Third person (beta)* (behind the character you play, turned with the right
+  stick, up and down for closer or further, kept inside the room by the game's
+  own collision) or *First person (beta)* (through their eyes, looking around
+  with the right stick). Both hold still while you aim.
 - **Widescreen**: the game's own 16:9 mode (more of the room at the sides, not
   stretched) with the HUD and prompts at the screen's edges; 4:3 too.
 - **New baked shadows** (below): the rooms' light and shadow redrawn sharp.
