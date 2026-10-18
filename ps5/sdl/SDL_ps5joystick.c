@@ -30,10 +30,25 @@ static bool ps5_pad_opened;
 static uint32_t ps5_connected;              // a bit a player, as SDL knows them
 static int ps5_device_player[PAD_PLAYERS];  // device index -> player
 static int ps5_devices;
+/* A player's instance ID, new each time their controller connects. A controller
+ * that turned itself off (the console's idle timer) and came back must not get
+ * its old ID: SDL_OpenGamepad would hand back the old, detached gamepad if the
+ * title never closed it, and that one never reads input again. */
+static SDL_JoystickID ps5_instance[PAD_PLAYERS];
 
 static SDL_JoystickID PS5_InstanceID(int player)
 {
-    return (SDL_JoystickID)(player + 1);
+    return ps5_instance[player];
+}
+
+static int PS5_Player(SDL_Joystick *joystick)
+{
+    for (int player = 0; player < PAD_PLAYERS; player++) {
+        if ((ps5_connected & (1u << player)) && ps5_instance[player] == joystick->instance_id) {
+            return player;
+        }
+    }
+    return -1;
 }
 
 static void PS5_ListDevices(void)
@@ -60,6 +75,7 @@ static void PS5_JoystickDetect(void)
         const uint32_t bit = 1u << player;
         if ((now & bit) && !(ps5_connected & bit)) {
             ps5_connected |= bit;
+            ps5_instance[player] = SDL_GetNextObjectID();
             PS5_ListDevices();
             SDL_PrivateJoystickAdded(PS5_InstanceID(player));
         } else if (!(now & bit) && (ps5_connected & bit)) {
@@ -136,7 +152,7 @@ static bool PS5_JoystickOpen(SDL_Joystick *joystick, int device_index)
 
 static bool PS5_JoystickRumble(SDL_Joystick *joystick, Uint16 low_frequency_rumble, Uint16 high_frequency_rumble)
 {
-    pad_player_vibrate((int)joystick->instance_id - 1, low_frequency_rumble / 65535.0f, high_frequency_rumble / 65535.0f);
+    pad_player_vibrate(PS5_Player(joystick), low_frequency_rumble / 65535.0f, high_frequency_rumble / 65535.0f);
     return true;
 }
 
@@ -147,7 +163,7 @@ static bool PS5_JoystickRumbleTriggers(SDL_Joystick *joystick, Uint16 left, Uint
 
 static bool PS5_JoystickSetLED(SDL_Joystick *joystick, Uint8 red, Uint8 green, Uint8 blue)
 {
-    pad_player_light_bar((int)joystick->instance_id - 1, red, green, blue);
+    pad_player_light_bar(PS5_Player(joystick), red, green, blue);
     return true;
 }
 
@@ -179,7 +195,7 @@ static void PS5_JoystickUpdate(SDL_Joystick *joystick)
     struct pad pad;
 
     /* PS5_JoystickDetect polled the pads just before */
-    if (!pad_player((int)joystick->instance_id - 1, &pad) || (pad.held & PAD_INTERCEPTED)) {
+    if (!pad_player(PS5_Player(joystick), &pad) || (pad.held & PAD_INTERCEPTED)) {
         return;
     }
     for (int i = 0; i < PS5_BUTTONS; i++) {
@@ -195,7 +211,7 @@ static void PS5_JoystickUpdate(SDL_Joystick *joystick)
 
 static void PS5_JoystickClose(SDL_Joystick *joystick)
 {
-    pad_player_vibrate((int)joystick->instance_id - 1, 0.0f, 0.0f);
+    pad_player_vibrate(PS5_Player(joystick), 0.0f, 0.0f);
 }
 
 static void PS5_JoystickQuit(void)
