@@ -83,10 +83,28 @@ index a526a1133..f3c72194f 100644
              break;
          }
 diff --git a/src/dawn/native/vulkan/SwapChainVk.cpp b/src/dawn/native/vulkan/SwapChainVk.cpp
-index 7d88e5fcb..24c43fe4d 100644
+index 7d88e5fcb..1699d3949 100644
 --- a/src/dawn/native/vulkan/SwapChainVk.cpp
 +++ b/src/dawn/native/vulkan/SwapChainVk.cpp
-@@ -665,6 +665,46 @@ ResultOrError<VkSurfaceKHR> CreateVulkanSurface(InstanceBase* instance,
+@@ -282,6 +282,17 @@ ResultOrError<SwapChain::Config> SwapChain::ChooseConfig(
+     config.wgpuFormat = GetFormat();
+     config.format = VulkanImageFormat(ToBackend(GetDevice()), config.wgpuFormat);
+     config.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
++#if DAWN_PLATFORM_IS(PS5)
++    // PS5 port: a 10-bit swapchain is HDR10 (BT.2020 PQ) where the surface
++    // offers it; the console's Vulkan driver registers its buffers as HDR.
++    if (config.format == VK_FORMAT_A2B10G10R10_UNORM_PACK32) {
++        for (const VkSurfaceFormatKHR& format : surfaceInfo.formats) {
++            if (format.format == config.format && format.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT) {
++                config.colorSpace = VK_COLOR_SPACE_HDR10_ST2084_EXT;
++            }
++        }
++    }
++#endif
+ 
+     bool formatIsSupported = false;
+     for (const VkSurfaceFormatKHR& format : surfaceInfo.formats) {
+@@ -665,6 +676,46 @@ ResultOrError<VkSurfaceKHR> CreateVulkanSurface(InstanceBase* instance,
  
  #endif  // DAWN_PLATFORM_IS(ANDROID)
  
