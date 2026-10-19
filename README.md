@@ -7,7 +7,7 @@
 **Eternal Darkness: Sanity's Requiem** (GameCube, 2002) as PS5 homebrew, title
 `PPSA99314`, at 4K and 60 frames a second, built from
 [Eternal Darkness Recomp](https://github.com/griches/EternalDarknessRecomp) and
-**your own disc**. Version 0.9.4.
+**your own disc**. Version 0.9.5.
 
 > **European disc only.** You need your own image of the **European GameCube disc,
 > `GEDP01`**. The USA disc (`GEDE01`) is not supported.
