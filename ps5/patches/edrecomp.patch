@@ -1,8 +1,34 @@
+diff --git a/runtime/host/audio.c b/runtime/host/audio.c
+index ab041db..cd71516 100644
+--- a/runtime/host/audio.c
++++ b/runtime/host/audio.c
+@@ -232,13 +232,21 @@ static void send_out(s16* output, u32 frames, u32 rate) {
+         g_pcm_wall = g_pcm_out != NULL && getenv("ED_PCM_WALL") != NULL;
+         if (g_pcm_wall) {
+             struct timespec now;
++#if defined(__PROSPERO__)
++            clock_gettime(CLOCK_REALTIME, &now);  // the console's C library has no timespec_get
++#else
+             timespec_get(&now, TIME_UTC);
++#endif
+             fprintf(stderr, "[audio] pcm out starts at %.3f, %u Hz\n", now.tv_sec + now.tv_nsec / 1e9, rate);
+         }
+     }
+     if (g_pcm_out != NULL && g_pcm_wall) {
+         struct timespec ts;
++#if defined(__PROSPERO__)
++        clock_gettime(CLOCK_REALTIME, &ts);
++#else
+         timespec_get(&ts, TIME_UTC);
++#endif
+         const double now = ts.tv_sec + ts.tv_nsec / 1e9;
+         if (g_pcm_last_s != 0.0 && now - g_pcm_last_s > 0.1 && rate != 0u) {
+             static const s16 silence[16 * 2] = {0};
 diff --git a/runtime/host/hle.c b/runtime/host/hle.c
-index 58a13eb..d2ff930 100644
+index 660cca5..2716d64 100644
 --- a/runtime/host/hle.c
 +++ b/runtime/host/hle.c
-@@ -1913,7 +1913,11 @@ static bool thp_movie_plane_generation(CPUState* cpu, u32 guest_data,
+@@ -2010,7 +2010,11 @@ static bool thp_movie_plane_generation(CPUState* cpu, u32 guest_data,
  
  static double host_time_seconds(void) {
      struct timespec ts;
