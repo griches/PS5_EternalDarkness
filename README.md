@@ -126,6 +126,7 @@ The game's files (its program, graphics, sound and music) come from your disc.
 - **Save anywhere**: the pause menu has four save slots that hold the whole
   moment, besides the game's own memory-card saves (slots A and B).
 - **A launcher**: Continue, New game or any save slot straight from the start.
+- **New insanity effects**: secret ones of the recomp's own, alongside the game's.
 - **Problem reports**: if the game stops responding, stops or crashes, it says
   so on screen and writes a report to `saves/reports/` (fetch it over FTP and
   send it with a few words on what you were doing).
