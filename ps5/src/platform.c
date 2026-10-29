@@ -17,6 +17,7 @@
 #include <stdatomic.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
@@ -465,4 +466,103 @@ audio_stop(void)
    pthread_join(audio_thread, NULL);
    (void)sceAudioOutClose(audio_port);
    audio_port = -1;
+}
+
+/* The DualSense's own speaker: a port of player 0's user, the pad speaker
+ * type, 16-bit mono at 48 kHz (what it takes). A sound is resampled into a
+ * buffer here and a thread of its own plays it a grain at a time; a new one
+ * replaces one still playing. */
+#define SPEAKER_PORT_TYPE 4 /* the pad speaker */
+#define SPEAKER_FORMAT_S16_MONO 0
+#define SPEAKER_RATE 48000
+
+static int32_t speaker_port = -1;
+static int32_t speaker_user = -1;
+static bool speaker_failed;
+static pthread_t speaker_thread;
+static pthread_mutex_t speaker_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t speaker_wake = PTHREAD_COND_INITIALIZER;
+static int16_t *speaker_sound;
+static uint32_t speaker_length, speaker_at;
+
+static void *
+speaker_main(void *unused)
+{
+   (void)unused;
+   static int16_t grain[AUDIO_GRAIN] __attribute__((aligned(64)));
+   for (;;) {
+      pthread_mutex_lock(&speaker_lock);
+      while (speaker_sound == NULL || speaker_at >= speaker_length)
+         pthread_cond_wait(&speaker_wake, &speaker_lock);
+      const uint32_t left = speaker_length - speaker_at;
+      const uint32_t n = left < AUDIO_GRAIN ? left : AUDIO_GRAIN;
+      memcpy(grain, speaker_sound + speaker_at, n * sizeof grain[0]);
+      memset(grain + n, 0, (AUDIO_GRAIN - n) * sizeof grain[0]);
+      speaker_at += n;
+      const int32_t port = speaker_port;
+      pthread_mutex_unlock(&speaker_lock);
+      /* Blocks for one grain, as the main output does. */
+      if (sceAudioOutOutput(port, grain) < 0)
+         sceKernelUsleep(5000);
+   }
+   return NULL;
+}
+
+bool
+pad_speaker_play(const int16_t *samples, uint32_t count, uint32_t rate, float volume)
+{
+   const int32_t user = pad_states[0].user;
+   if (!pad_service || pad_states[0].handle < 0 || samples == NULL || count == 0 || rate == 0)
+      return false;
+   if (speaker_port >= 0 && user != speaker_user) {
+      pthread_mutex_lock(&speaker_lock);
+      (void)sceAudioOutClose(speaker_port);
+      speaker_port = -1;
+      pthread_mutex_unlock(&speaker_lock);
+   }
+   if (speaker_port < 0) {
+      const int init = sceAudioOutInit();
+      const int32_t port = init < 0 && init != AUDIO_ALREADY_INITIALISED
+                              ? init
+                              : sceAudioOutOpen(user, SPEAKER_PORT_TYPE, 0, AUDIO_GRAIN, SPEAKER_RATE,
+                                                SPEAKER_FORMAT_S16_MONO);
+      if (port < 0) {
+         if (!speaker_failed)
+            say("pad speaker: sceAudioOutOpen for user %d 0x%08x (the sound stays on the TV)", (int)user,
+                (unsigned)port);
+         speaker_failed = true;
+         return false;
+      }
+      static bool started;
+      if (!started && pthread_create(&speaker_thread, NULL, speaker_main, NULL) != 0) {
+         (void)sceAudioOutClose(port);
+         say("pad speaker: no thread");
+         return false;
+      }
+      started = true;
+      speaker_port = port;
+      speaker_user = user;
+      say("pad speaker: port %d for user %d", (int)port, (int)user);
+   }
+   /* To 48 kHz by linear steps, scaled. */
+   const uint64_t length = (uint64_t)count * SPEAKER_RATE / rate;
+   int16_t *sound = malloc((size_t)length * sizeof *sound);
+   if (sound == NULL)
+      return false;
+   const float gain = volume < 0.f ? 0.f : volume > 1.f ? 1.f : volume;
+   for (uint64_t i = 0; i < length; i++) {
+      const double at = (double)i * rate / SPEAKER_RATE;
+      const uint32_t j = (uint32_t)at;
+      const float f = (float)(at - j);
+      const float a = samples[j], b = j + 1 < count ? samples[j + 1] : a;
+      sound[i] = (int16_t)((a + (b - a) * f) * gain);
+   }
+   pthread_mutex_lock(&speaker_lock);
+   free(speaker_sound);
+   speaker_sound = sound;
+   speaker_length = (uint32_t)length;
+   speaker_at = 0;
+   pthread_cond_signal(&speaker_wake);
+   pthread_mutex_unlock(&speaker_lock);
+   return true;
 }

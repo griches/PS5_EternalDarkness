@@ -103,6 +103,11 @@ bool audio_start(audio_fill_fn fill, void *user);
 /* Stops the thread and closes the output; call it before what fill uses goes. */
 void audio_stop(void);
 
+/* The DualSense's own speaker, player 0's: one sound (16-bit mono at `rate`,
+ * scaled by volume 0..1) on a thread of its own, cutting short one still
+ * playing. false when there is no controller or its speaker will not open. */
+bool pad_speaker_play(const int16_t *samples, uint32_t count, uint32_t rate, float volume);
+
 #ifdef __cplusplus
 }
 #endif
