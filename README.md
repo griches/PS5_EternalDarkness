@@ -42,8 +42,8 @@ Two downloads, both DDS:
 | **[PAL supplement](https://drive.google.com/file/d/1BuoE0uL4K3xn5KfH8KYYtC6fk-6QiiiA/view)** by Eternal Darkness Recomp | What the pack misses on the European disc: the Jump to Game, Options and Language screens and the title menu's words, and highlights without hard edges | 13.2&nbsp;MB&nbsp;`.zip` |
 
 1. Unpack both on your computer. Each one gives you a folder.
-2. Make a folder called `textures` in `/data/homebrew/PPSA99314/` and copy both
-   folders into it. The pack is a few GB, so this takes a while.
+2. Copy both folders into the `textures` folder in `/data/homebrew/PPSA99314/`
+   (it comes with the title, with a note in it). The pack is a few GB, so this takes a while.
 
 Leave both folders as they are: the supplement replaces some of the pack's
 textures on purpose, and a folder with *supplement* in its name always wins.
@@ -78,7 +78,7 @@ pack; the folders' names don't matter.
 3. Choose **New game**.
 
 The defaults are already the best picture: 4K, widescreen, HD textures on and
-sharp baked shadows. In **Options > Game**, **HD textures** should say **On**,
+sharp baked shadows. In **Options > Graphics**, **HD textures** should say **On**,
 and its note gives the number of textures it found.
 
 ### If something's wrong
@@ -158,7 +158,7 @@ deadzone and vibration, and **Button mapping** rebinds any action (that layout i
 Eternal Darkness lights its rooms with pre-drawn light maps: the window light on
 the floors, the shadows under the furniture, the glow of the lamps. On the disc
 they are small and compressed, so at 4K their edges break up into blocks and
-smears. With **Options > Game > Baked shadows: Sharp** (the default) each room's
+smears. With **Options > Graphics > Baked shadows: Sharp** (the default) each room's
 light maps are rebuilt four times larger as the room loads, with the compression
 blocks evened out and edges doubled along their own direction, so light and
 shadow keep clean edges. **Original** shows them as on the disc.

@@ -24,6 +24,12 @@ cat > "$work/$title/dump/PUT YOUR DISC HERE.txt" <<'EOF'
 Put your own image of the European Eternal Darkness disc (GEDP01, .iso or
 .gcm) in this folder. Any file name works.
 EOF
+mkdir -p "$work/$title/textures"
+cat > "$work/$title/textures/PUT HD TEXTURE PACKS HERE.txt" <<'EOF'
+Put HD texture packs here: unpack each pack and put its folder in this one
+as it comes (Dolphin's format: tex1_... .png or .dds files, in any
+subfolders). Options > Graphics > HD textures then says how many it found.
+EOF
 zip_path="$root/dist/EternalDarkness-PS5-$version.zip"
 rm -f "$zip_path"
 (cd "$work" && COPYFILE_DISABLE=1 zip -q -r -X "$zip_path" "$title")
