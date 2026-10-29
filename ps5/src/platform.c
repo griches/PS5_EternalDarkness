@@ -512,8 +512,13 @@ bool
 pad_speaker_play(const int16_t *samples, uint32_t count, uint32_t rate, float volume)
 {
    const int32_t user = pad_states[0].user;
-   if (!pad_service || pad_states[0].handle < 0 || samples == NULL || count == 0 || rate == 0)
+   if (!pad_service || pad_states[0].handle < 0 || samples == NULL || count == 0 || rate == 0) {
+      static bool said;
+      if (!said)
+         say("pad speaker: no controller for player 1 (the sound stays on the TV)");
+      said = true;
       return false;
+   }
    if (speaker_port >= 0 && user != speaker_user) {
       pthread_mutex_lock(&speaker_lock);
       (void)sceAudioOutClose(speaker_port);
